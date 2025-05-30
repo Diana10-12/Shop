@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ProcurementApp.Views.Buyer.CheckoutPage"
+             Title="Оформление заказа">
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="20" Padding="20">
+
+            <!-- 📍 Блок ввода адреса и выбора на карте -->
+            <VerticalStackLayout>
+
+                <Label Text="Адрес доставки" FontSize="Medium"/>
+
+                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
+                    <Entry Text="{Binding Address}"
+                           Placeholder="Введите адрес или выберите на карте"
+                           Grid.Column="0"/>
+
+                    <Button Text="🔍"
+                            Command="{Binding SearchAddressCommand}"
+                            Grid.Column="1"
+                            WidthRequest="40"
+                            HeightRequest="40"
+                            BackgroundColor="#512BD4"
+                            TextColor="White"/>
+                </Grid>
+
+                <Button Text="📍 Определить мое местоположение"
+                        Command="{Binding GetLocationCommand}"
+                        BackgroundColor="#512BD4"
+                        TextColor="White"
+                        Margin="0,5,0,0"/>
+
+                <!-- 🗺️ Карта -->
+                <WebView x:Name="MapView"
+                         Source="{Binding MapHtmlSource}"
+                         HeightRequest="300"
+                         WidthRequest="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=Width}"
+                         Margin="0,10,0,20"
+                         HorizontalOptions="FillAndExpand"/>
+            </VerticalStackLayout>
+
+            <!-- 💵 Детали заказа -->
+            <Label Text="Сумма заказа:" FontSize="Medium"/>
+            <Label Text="{Binding TotalAmount, StringFormat='{0:C}'}" FontSize="Large"/>
+
+
+
+            <!-- Кнопка с текстом из Binding и индикатор загрузки -->
+            <Button Text="{Binding DeliveryButtonText}"
+                    Command="{Binding CalculateDeliveryCommand}"
+                    BackgroundColor="#512BD4"
+                    TextColor="White"
+                    IsEnabled="{Binding IsNotCalculating}"/>
+
+            <ActivityIndicator IsRunning="{Binding IsCalculating}"
+                               IsVisible="{Binding IsCalculating}"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center"/>
+
+            <Label Text="Стоимость доставки:" FontSize="Medium"/>
+            <Label Text="{Binding DeliveryCost, StringFormat='{0:C}'}" FontSize="Large"/>
+
+            <Label Text="Примерное время доставки:" FontSize="Medium"/>
+            <Label Text="{Binding EstimatedDays, StringFormat='{0} дней'}" FontSize="Large"/>
+
+            <Label Text="Погодные условия:" FontSize="Medium"/>
+            <Label Text="{Binding WeatherImpact}" FontSize="Small"/>
+
+            <!-- 💰 Итого -->
+            <Label Text="Итого к оплате:" FontSize="Medium" FontAttributes="Bold"/>
+            <Label Text="{Binding TotalWithDelivery, StringFormat='{0:C}'}" FontSize="Large" FontAttributes="Bold"/>
+
+            <!-- 🛒 Действия -->
+            <Button Text="Оформить заказ"
+                    Command="{Binding PlaceOrderCommand}"
+                    BackgroundColor="Green"
+                    TextColor="White"
+                    Margin="0,20,0,0"/>
+
+            <Button Text="Назад"
+                    Clicked="OnBackClicked"
+                    BackgroundColor="Gray"
+                    TextColor="White"/>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

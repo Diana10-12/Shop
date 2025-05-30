@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModels="clr-namespace:ProcurementApp.ViewModels.Seller"
+             x:Class="ProcurementApp.Views.Seller.AddProductPage"
+             Title="Добавить товар">
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="20" Padding="20">
+            <Frame>
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Добавить новый товар" FontSize="Medium" FontAttributes="Bold"/>
+
+                    <Entry Text="{Binding NewProductName}" Placeholder="Название товара"/>
+                    <Entry Text="{Binding NewProductDescription}" Placeholder="Описание"/>
+                    <Entry Text="{Binding NewProductPrice}" Placeholder="Цена"/>
+                    <Entry Text="{Binding NewProductQuantity}" 
+                           Placeholder="Количество на складе"/>
+
+                    <Label Text="Изображения" FontAttributes="Bold"/>
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Entry x:Name="newImageEntry" Grid.Column="0" Placeholder="URL изображения"/>
+                        <Button Grid.Column="1" Text="Добавить"  
+                                Command="{Binding AddImageCommand}"
+                                CommandParameter="{Binding Text, Source={x:Reference newImageEntry}}"/>
+                    </Grid>
+
+                    <HorizontalStackLayout Spacing="10" HorizontalOptions="FillAndExpand">
+                        <Button Text="Из галереи" 
+                                Command="{Binding PickImageFromGalleryCommand}"
+                                BackgroundColor="#512BD4"
+                                TextColor="White"
+                                HorizontalOptions="FillAndExpand"/>
+                        <Button Text="Сделать фото" 
+                                Command="{Binding TakePhotoCommand}"
+                                BackgroundColor="#512BD4"
+                                TextColor="White"
+                                HorizontalOptions="FillAndExpand"/>
+                    </HorizontalStackLayout>
+
+                    <CollectionView ItemsSource="{Binding NewProductImages}"
+                                  HeightRequest="100">
+                        <CollectionView.EmptyView>
+                            <Label Text="Нет изображений для добавления." Padding="10"/>
+                        </CollectionView.EmptyView>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid ColumnDefinitions="*,Auto" Padding="5">
+                                    <Image Grid.Column="0" 
+                                           Source="{Binding .}" 
+                                           Aspect="AspectFill" 
+                                           HeightRequest="80"/>
+                                    <Button Grid.Column="1" 
+                                            Text="×" 
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:ProductsManagementViewModel}}, Path=RemoveImageCommand}"
+                                            CommandParameter="{Binding .}"
+                                            TextColor="Red"
+                                            VerticalOptions="Center"/>
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+
+                    <Button Text="Добавить товар" 
+                            Command="{Binding AddProductCommand}"
+                            BackgroundColor="#512BD4"
+                            TextColor="White"/>
+                </VerticalStackLayout>
+            </Frame>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

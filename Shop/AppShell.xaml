@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="ProcurementApp.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:ProcurementApp"
+    xmlns:auth="clr-namespace:ProcurementApp.Views.Auth"
+    xmlns:buyer="clr-namespace:ProcurementApp.Views.Buyer"
+    xmlns:seller="clr-namespace:ProcurementApp.Views.Seller"
+    Shell.FlyoutBehavior="Disabled">
+
+    <!-- Auth routes -->
+    <ShellContent
+        Route="LoginPage"
+        ContentTemplate="{DataTemplate auth:LoginPage}"
+        Title="Вход"/>
+
+    <ShellContent
+        Route="RegistrationPage"
+        ContentTemplate="{DataTemplate auth:RegistrationPage}"
+        Title="Регистрация"/>
+
+    <!-- Маршруты для покупателя -->
+    <TabBar Route="Buyer">
+        <ShellContent
+            Title="Каталог"
+            Icon="store.png"
+            Route="ProductsPage"
+            ContentTemplate="{DataTemplate buyer:ProductsPage}" />
+
+        <ShellContent
+            Title="Корзина"
+            Icon="cart.png"
+            Route="CartPage"
+            ContentTemplate="{DataTemplate buyer:CartPage}" />
+
+        <!-- Упрощенная навигация для страницы отслеживания -->
+        <ShellContent
+            Title="Мои заказы"
+            Icon="tracking.png"
+            Route="OrderTrackingPage"
+            ContentTemplate="{DataTemplate buyer:OrderTrackingPage}" />
+    </TabBar>
+
+    <!-- Маршруты для продавца -->
+    <TabBar Route="Seller">
+        <ShellContent
+            Title="Добавить"
+            Icon="add.png"
+            Route="AddProductPage"
+            ContentTemplate="{DataTemplate seller:AddProductPage}" />
+
+        <ShellContent
+            Title="Мои товары"
+            Icon="list.png"
+            Route="MyProductsPage"
+            ContentTemplate="{DataTemplate seller:MyProductsPage}" />
+    </TabBar>
+</Shell>

@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModels="clr-namespace:ProcurementApp.ViewModels.Buyer"
+             x:Class="ProcurementApp.Views.Buyer.ProductsPage"
+             Title="Каталог товаров">
+
+    <RefreshView IsRefreshing="{Binding IsBusy}"
+                 Command="{Binding LoadProductsCommand}">
+        <CollectionView ItemsSource="{Binding Products}"
+                        SelectionMode="None">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Grid Padding="10">
+                        <Frame Padding="0" CornerRadius="10">
+                            <Grid ColumnDefinitions="120,*" RowDefinitions="*,Auto">
+                                <!-- Image column -->
+                                <Image Grid.Column="0"
+                                       Source="{Binding ImageUrl, FallbackValue='placeholder.png'}"
+                                       Aspect="AspectFill"
+                                       HeightRequest="120"
+                                       WidthRequest="120">
+                                    <Image.Triggers>
+                                        <DataTrigger TargetType="Image"
+                                                     Binding="{Binding ImageUrl}"
+                                                     Value="{x:Null}">
+                                            <Setter Property="Source" Value="placeholder.png"/>
+                                        </DataTrigger>
+                                    </Image.Triggers>
+                                </Image>
+
+                                <!-- Content column -->
+                                <Grid Grid.Column="1" Padding="10">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <!-- Product name -->
+                                    <Label Grid.Row="0" Grid.Column="0"
+                                           Text="{Binding Name}"
+                                           FontSize="Medium"
+                                           FontAttributes="Bold"
+                                           LineBreakMode="TailTruncation"/>
+
+                                    <!-- Product description -->
+                                    <Label Grid.Row="1" Grid.Column="0"
+                                           Text="{Binding Description}"
+                                           FontSize="Small"
+                                           MaxLines="2"
+                                           LineBreakMode="TailTruncation"/>
+
+                                    <!-- Price -->
+                                    <Label Grid.Row="2" Grid.Column="0"
+                                           Text="{Binding Price, StringFormat='Цена: {0:C}'}"
+                                           FontSize="Medium"
+                                           VerticalOptions="End"/>
+
+                                    <!-- Total price -->
+                                    <Label Grid.Row="2" Grid.Column="1"
+                                            FontSize="Medium"
+                                            FontAttributes="Bold"
+                                            VerticalOptions="End">
+                                        <Label.Text>
+                                            <MultiBinding StringFormat="Итого: {0:C}">
+                                                <Binding Path="." Converter="{StaticResource ProductTotalPriceConverter}"/>
+                                            </MultiBinding>
+                                        </Label.Text>
+                                    </Label>
+
+                                    <!-- Quantity controls -->
+                                    <StackLayout Grid.Row="3" Grid.ColumnSpan="2"
+                                                 Orientation="Horizontal"
+                                                 Spacing="5"
+                                                 HorizontalOptions="End"
+                                                 VerticalOptions="Center">
+                                        <Button Text="-"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:ProductsViewModel}}, Path=DecreaseQuantityCommand}"
+                                                CommandParameter="{Binding .}"
+                                                WidthRequest="30"
+                                                HeightRequest="30"
+                                                FontSize="12"
+                                                CornerRadius="15"/>
+
+                                        <Label Text="{Binding ., Converter={StaticResource ProductQuantityConverter}}"
+                                               VerticalTextAlignment="Center"
+                                               HorizontalTextAlignment="Center"
+                                               FontSize="14"
+                                               WidthRequest="30"/>
+
+                                        <Button Text="+"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:ProductsViewModel}}, Path=AddToCartCommand}"
+                                                CommandParameter="{Binding .}"
+                                                WidthRequest="30"
+                                                HeightRequest="30"
+                                                FontSize="12"
+                                                CornerRadius="15"/>
+                                    </StackLayout>
+                                </Grid>
+
+                                <!-- CollectionView for additional images - moved inside the main Grid -->
+                                <CollectionView Grid.Row="1" Grid.ColumnSpan="2"
+                                               ItemsSource="{Binding Images}"
+                                               HeightRequest="100"
+                                               HorizontalScrollBarVisibility="Always">
+                                    <CollectionView.ItemsLayout>
+                                        <LinearItemsLayout Orientation="Horizontal" ItemSpacing="10"/>
+                                    </CollectionView.ItemsLayout>
+                                    <CollectionView.ItemTemplate>
+                                        <DataTemplate>
+                                            <Image Source="{Binding ImageUrl}" 
+                                                   Aspect="AspectFill"
+                                                   HeightRequest="80"
+                                                   WidthRequest="80"/>
+                                        </DataTemplate>
+                                    </CollectionView.ItemTemplate>
+                                </CollectionView>
+                            </Grid>
+                        </Frame>
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </RefreshView>
+</ContentPage>

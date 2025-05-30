@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:converters="clr-namespace:ProcurementApp.Converters"
+    xmlns:models="clr-namespace:ProcurementApp.Data.Models"
+    x:Class="ProcurementApp.Views.Buyer.OrderTrackingPage"
+    Title="Мои заказы">
+
+    <RefreshView IsRefreshing="{Binding IsBusy}"
+                 Command="{Binding LoadOrdersCommand}">
+        <CollectionView ItemsSource="{Binding Orders}"
+                        SelectionMode="None"
+                        EmptyView="У вас пока нет заказов">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="models:PurchaseOrder">
+                    <Frame Padding="15" Margin="10">
+                        <Grid RowDefinitions="Auto,Auto,Auto,Auto"
+                              ColumnDefinitions="*,*">
+
+                            <Label Grid.Row="0" Grid.ColumnSpan="2"
+                                   Text="{Binding OrderId, StringFormat='Заказ №{0}'}"
+                                   FontSize="Medium"
+                                   FontAttributes="Bold"/>
+
+                            <Label Grid.Row="1" Grid.Column="0"
+                                   Text="Дата оформления:"
+                                   FontSize="Small"/>
+                            <Label Grid.Row="1" Grid.Column="1"
+                                   Text="{Binding CreatedAt, StringFormat='{0:dd.MM.yyyy HH:mm}'}"
+                                   FontSize="Small"
+                                   HorizontalOptions="End"/>
+
+                            <Label Grid.Row="2" Grid.Column="0"
+                                   Text="Сумма заказа:"
+                                   FontSize="Small"/>
+                            <Label Grid.Row="2" Grid.Column="1"
+                                   Text="{Binding TotalAmount, StringFormat='{0:C}'}"
+                                   FontSize="Small"
+                                   HorizontalOptions="End"/>
+
+                            <Label Grid.Row="3" Grid.Column="0"
+                                   Text="Дата доставки:"
+                                   FontSize="Small"/>
+                            <Label Grid.Row="3" Grid.Column="1"
+                                   Text="{Binding EstimatedDeliveryDate, StringFormat='{0:dd.MM.yyyy}'}"
+                                   FontSize="Small"
+                                   HorizontalOptions="End">
+                                <Label.TextColor>
+                                    <Binding Path="EstimatedDeliveryDate">
+                                        <Binding.Converter>
+                                            <converters:DeliveryDateColorConverter/>
+                                        </Binding.Converter>
+                                    </Binding>
+                                </Label.TextColor>
+                            </Label>
+                        </Grid>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </RefreshView>
+</ContentPage>

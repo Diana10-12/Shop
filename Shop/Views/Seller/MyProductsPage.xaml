@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModels="clr-namespace:ProcurementApp.ViewModels.Seller"
+             xmlns:models="clr-namespace:ProcurementApp.Data.Models"
+             x:Class="ProcurementApp.Views.Seller.MyProductsPage"
+             Title="Мои товары">
+
+    <RefreshView IsRefreshing="{Binding IsBusy}" 
+                 Command="{Binding LoadProductsCommand}">
+        <CollectionView ItemsSource="{Binding Products}"
+                        SelectionMode="None"
+                        EmptyView="У вас пока нет товаров">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="models:Product">
+                    <Frame Padding="10" Margin="0,0,0,10">
+                        <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto,Auto">
+                            <Label Grid.Row="0" Grid.Column="0"
+                                   Text="{Binding Name}"
+                                   FontSize="Medium"
+                                   FontAttributes="Bold"/>
+
+                            <Label Grid.Row="1" Grid.Column="0"
+                                   Text="{Binding Description}"
+                                   FontSize="Small"/>
+
+                            <Label Grid.Row="2" Grid.Column="0"
+                                   Text="{Binding Price, StringFormat='Цена: {0:C}'}"/>
+
+                            <Label Grid.Row="3" Grid.Column="0"
+                                   Text="{Binding StockQuantity, StringFormat='Количество: {0}'}"/>
+
+                            <HorizontalStackLayout Grid.Row="0" Grid.Column="1" Grid.RowSpan="4"
+                                                 Spacing="10"
+                                                 VerticalOptions="Center">
+                                <Button Text="Удалить"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:ProductsManagementViewModel}}, Path=DeleteProductCommand}"
+                                        CommandParameter="{Binding .}"
+                                        BackgroundColor="#D9534F"
+                                        TextColor="White"/>
+
+                                <Button Text="-"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:ProductsManagementViewModel}}, Path=DecreaseQuantityCommand}"
+                                        CommandParameter="{Binding .}"
+                                        WidthRequest="40"/>
+
+                                <Button Text="+"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:ProductsManagementViewModel}}, Path=IncreaseQuantityCommand}"
+                                        CommandParameter="{Binding .}"
+                                        WidthRequest="40"/>
+                            </HorizontalStackLayout>
+                        </Grid>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </RefreshView>
+</ContentPage>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ProcurementApp.Views.Auth.LoginPage"
+             Title="Вход в систему">
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="20" Padding="30">
+
+            <Image Source="logo.png" 
+                   HeightRequest="100"
+                   HorizontalOptions="Center"/>
+
+            <Label Text="Вход в систему" 
+                   FontSize="Title"
+                   HorizontalOptions="Center"/>
+
+            <Entry x:Name="emailEntry" 
+                   Placeholder="Email"
+                   Keyboard="Email"
+                   Text="{Binding Email}"/>
+
+            <Entry x:Name="passwordEntry" 
+                   Placeholder="Пароль"
+                   IsPassword="True"
+                   Text="{Binding Password}"/>
+
+            <Button Text="Войти" 
+                    Clicked="OnLoginClicked"
+                    BackgroundColor="#512BD4"
+                    TextColor="White"/>
+
+            <Label>
+                <Label.FormattedText>
+                    <FormattedString>
+                        <Span Text="Нет аккаунта? "/>
+                        <Span Text="Зарегистрироваться" 
+                              TextColor="Blue"
+                              TextDecorations="Underline">
+                            <Span.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnRegisterTapped"/>
+                            </Span.GestureRecognizers>
+                        </Span>
+                    </FormattedString>
+                </Label.FormattedText>
+            </Label>
+
+            <Label Text="Или войти с помощью"
+                   HorizontalOptions="Center"/>
+
+            <HorizontalStackLayout HorizontalOptions="Center" Spacing="20">
+                <ImageButton Source="google.png" 
+                            HeightRequest="40"
+                            WidthRequest="40"
+                            Clicked="OnGoogleLoginClicked"/>
+
+                <ImageButton Source="facebook.png" 
+                            HeightRequest="40"
+                            WidthRequest="40"
+                            Clicked="OnFacebookLoginClicked"/>
+            </HorizontalStackLayout>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

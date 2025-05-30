@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModels="clr-namespace:ProcurementApp.ViewModels.Buyer"
+             x:Class="ProcurementApp.Views.Buyer.CartPage"
+             Title="Корзина">
+
+    <Grid RowDefinitions="*,Auto,Auto">
+        <RefreshView Grid.Row="0"
+                     IsRefreshing="{Binding IsBusy}"
+                     Command="{Binding LoadCartItemsCommand}">
+            <CollectionView ItemsSource="{Binding CartItems}"
+                            SelectionMode="None"
+                            EmptyView="Ваша корзина пуста">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Padding="10">
+                            <Frame Padding="0" CornerRadius="10" VerticalOptions="StartAndExpand">
+                                <Grid ColumnDefinitions="100,*"
+                                      RowDefinitions="*">
+
+                                    <Image Grid.Column="0"
+                                           Source="{Binding Product.ImageUrl, FallbackValue='placeholder.png'}"
+                                           Aspect="AspectFill">
+                                        <Image.Triggers>
+                                            <DataTrigger TargetType="Image"
+                                                         Binding="{Binding Product.ImageUrl}"
+                                                         Value="{x:Null}">
+                                                <Setter Property="Source" Value="placeholder.png"/>
+                                            </DataTrigger>
+                                        </Image.Triggers>
+                                    </Image>
+
+                                    <Grid Grid.Column="1"
+                                          Padding="10">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="*"/>
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <Label Grid.Row="0" Grid.Column="0"
+                                               Text="{Binding Product.Name}"
+                                               FontSize="Medium"
+                                               FontAttributes="Bold"/>
+
+                                        <Label Grid.Row="1" Grid.Column="0"
+                                               Text="{Binding Product.Price, StringFormat='{0:C} x {1}'}"
+                                               FontSize="Small"/>
+
+                                        <Label Grid.Row="2" Grid.Column="0"
+                                                Text="{Binding TotalItemPrice, StringFormat='Итого: {0:C}'}"
+                                                FontSize="Medium"
+                                                FontAttributes="Bold"/>
+
+                                        <StackLayout Grid.Row="0" Grid.Column="1" Grid.RowSpan="3"
+                                                     Orientation="Horizontal"
+                                                     Spacing="5">
+                                            <Button Text="-"
+                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:CartViewModel}}, Path=DecreaseQuantityCommand}"
+                                                    CommandParameter="{Binding .}"
+                                                    WidthRequest="40"
+                                                    HeightRequest="40"/>
+
+                                            <Label Text="{Binding Quantity}"
+                                                   VerticalTextAlignment="Center"
+                                                   FontSize="Medium"/>
+
+                                            <Button Text="+"
+                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:CartViewModel}}, Path=IncreaseQuantityCommand}"
+                                                    CommandParameter="{Binding .}"
+                                                    WidthRequest="40"
+                                                    HeightRequest="40"/>
+
+                                            <Button Text="×"
+                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:CartViewModel}}, Path=RemoveItemCommand}"
+                                                    CommandParameter="{Binding .}"
+                                                    BackgroundColor="Red"
+                                                    TextColor="White"
+                                                    WidthRequest="40"
+                                                    HeightRequest="40"/>
+                                        </StackLayout>
+                                    </Grid>
+                                </Grid>
+                            </Frame>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </RefreshView>
+
+        <Label Grid.Row="1"
+               Text="{Binding TotalPrice, StringFormat='Общая сумма: {0:C}'}"
+               FontSize="Large"
+               FontAttributes="Bold"
+               HorizontalOptions="End"
+               Margin="0,0,20,0"/>
+
+        <Button Grid.Row="2"
+                Text="Оформить заказ"
+                Command="{Binding CheckoutCommand}"
+                IsEnabled="{Binding CartItems.Count, Converter={StaticResource CountToBoolConverter}}"
+                BackgroundColor="#512BD4"
+                TextColor="White"
+                Margin="20"/>
+    </Grid>
+</ContentPage>
